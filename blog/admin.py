@@ -1,10 +1,10 @@
 from django.contrib import admin
 from .models import Category, Post, Comment, Like, PostView 
 
-class CategoryAdmin(models.ModelAdmin):
+class CategoryAdmin(admin.ModelAdmin):
     exclude = ('slug',)
 
-class PostAdmin(models.ModelAdmin):
+class PostAdmin(admin.ModelAdmin):
     exclude = ('slug',)
 
 admin.site.register(Category, CategoryAdmin)
