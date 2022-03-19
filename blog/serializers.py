@@ -23,6 +23,7 @@ class PostSerializer(serializers.ModelSerializer):
     likes_count = serializers.SerializerMethodField()
     postview_user = PostViewSerializer(many=True, write_only=True)
     postviews_count = serializers.SerializerMethodField()
+    user = serializers.HiddenField(default=serializers.CurrentUserDefault()) #buna bakılacak
 
     class Meta:
         model = Post
