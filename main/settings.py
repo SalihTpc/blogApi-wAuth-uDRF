@@ -27,9 +27,12 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # third party
     'rest_framework',
+    'rest_framework.authtoken',
     'drf_yasg',
     "debug_toolbar",
     "corsheaders",
+    'dj_rest_auth',
+    
 
     # my apps
     'blog',
