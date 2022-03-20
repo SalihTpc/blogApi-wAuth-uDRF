@@ -17,26 +17,27 @@ class CommentSerializer(serializers.ModelSerializer):
         fields = ('user', 'post', 'content', 'created_date')
 
 class PostSerializer(serializers.ModelSerializer):
-    comment_user = CommentSerializer(many=True, write_only=True)
+    comment_post = CommentSerializer(many=True, write_only=True)
     comments_count = serializers.SerializerMethodField()
-    like_user = LikeSerializer(many=True, write_only=True)
+    like_post = LikeSerializer(many=True, write_only=True)
     likes_count = serializers.SerializerMethodField()
-    postview_user = PostViewSerializer(many=True, write_only=True)
+    postview_post = PostViewSerializer(many=True, write_only=True)
     postviews_count = serializers.SerializerMethodField()
     user = serializers.HiddenField(default=serializers.CurrentUserDefault()) #buna bakılacak
+    category = serializers.StringRelatedField(many=True)
 
     class Meta:
         model = Post
-        fields = ('id', 'category', 'user', 'title', 'comment_user', 'comments_count', 'like_user', 'likes_count', 'postview_user', 'postviews_count')
+        fields = ('id', 'category', 'user', 'title', 'comment_post', 'comments_count', 'like_post', 'likes_count', 'postview_post', 'postviews_count')
 
     def get_comments_count(self, obj):
-        return obj.comment_user.count()
+        return obj.comment_post.count()
     
     def get_likes_count(self, obj):
-        return obj.like_user.count()
+        return obj.like_post.count()
 
     def get_postviews_count(self, obj):
-        return obj.postview_user.count()
+        return obj.postview_post.count()
 
 class CategorySerializer(serializers.ModelSerializer):
     post_cate = PostSerializer(many=True, write_only=True)
