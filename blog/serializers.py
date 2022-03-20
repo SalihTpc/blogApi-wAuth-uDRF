@@ -23,12 +23,14 @@ class PostSerializer(serializers.ModelSerializer):
     likes_count = serializers.SerializerMethodField()
     postview_post = PostViewSerializer(many=True, write_only=True)
     postviews_count = serializers.SerializerMethodField()
-    user = serializers.HiddenField(default=serializers.CurrentUserDefault()) #buna bakılacak
+    # user = serializers.HiddenField(default=serializers.CurrentUserDefault()) #buna bakılacak
     category = serializers.StringRelatedField(many=True)
+    user = serializers.StringRelatedField()
+    
 
     class Meta:
         model = Post
-        fields = ('id', 'category', 'user', 'title', 'comment_post', 'comments_count', 'like_post', 'likes_count', 'postview_post', 'postviews_count')
+        fields = ('id', 'category', 'user', 'title', 'body', 'image', 'comment_post', 'comments_count', 'like_post', 'likes_count', 'postview_post', 'postviews_count')
 
     def get_comments_count(self, obj):
         return obj.comment_post.count()
