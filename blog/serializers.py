@@ -82,17 +82,28 @@ class CommentSerializer(serializers.ModelSerializer):
             user = validated_data['user']
         return Comment.objects.create(user=user, **validated_data)
 
+class CategorySerializer(serializers.ModelSerializer):
+    # post_cate = PostSerializer(many=True, write_only=True)
+    # post_count = serializers.SerializerMethodField() , 'post_cate', 'post_count'
+    
+    class Meta:
+        model = Category
+        fields = ('id', 'name')
+    
+    # def get_post_count(self, obj):
+    #     return obj.post_cate.count()
+
 class PostSerializer(serializers.ModelSerializer):
     since_creation = serializers.SerializerMethodField()
     comment_post = CommentSerializer(many=True, read_only=True)
     comments_count = serializers.SerializerMethodField()
-    like_post = LikeSerializer(many=True, write_only=True)
+    like_post = LikeSerializer(many=True, required=False)
     likes_count = serializers.SerializerMethodField()
-    postview_post = PostViewSerializer(many=True, write_only=True)
+    postview_post = PostViewSerializer(many=True, required=False)
     postviews_count = serializers.SerializerMethodField()
     # user = serializers.HiddenField(default=serializers.CurrentUserDefault()) #buna bakılacak
-    category = serializers.StringRelatedField(many=True)
-    user = serializers.StringRelatedField()
+    category = CategorySerializer(many=True, required=False)
+    user = serializers.StringRelatedField(required=False)
     
 
     class Meta:
@@ -114,14 +125,20 @@ class PostSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         user = self.context['request'].user
-        if 'user' in validated_data:
-            user = validated_data['user']
-        return Post.objects.create(user=user, **validated_data)
+        categories = validated_data.pop("category")
+        validated_data["user"] = user
+        post = Post.objects.create(**validated_data)
+        if categories:
+            for category in categories:
+                new_cat, _ = Category.objects.get_or_create(name=category.get('name'))
+                post.category.add(new_cat.id)
+        post.save()
+        return post
 
-class CategorySerializer(serializers.ModelSerializer):
-    post_cate = PostSerializer(many=True, write_only=True)
-    post_count = serializers.SerializerMethodField()
-
+class CategoriesSerializer(serializers.ModelSerializer):
+    post_cate = PostSerializer(many=True, read_only=True)
+    post_count = serializers.SerializerMethodField() 
+    
     class Meta:
         model = Category
         fields = ('id', 'name', 'post_cate', 'post_count')
