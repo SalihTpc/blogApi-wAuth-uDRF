@@ -38,7 +38,7 @@ def getDuration(then, now = now(), interval = "default"):
             return '{} hours, {} minutes {} seconds ego'.format(int(h[0]), int(m[0]), int(s[0]))
         if int(y[0]) == 0:
             return '{} days, {} hours, {} minutes {} seconds ego'.format(int(d[0]), int(h[0]), int(m[0]), int(s[0]))
-        return "Time between dates: {} years, {} days, {} hours, {} minutes {} seconds ego".format(int(y[0]), int(d[0]), int(h[0]), int(m[0]), int(s[0]))
+        return "{} years, {} days, {} hours, {} minutes {} seconds ego".format(int(y[0]), int(d[0]), int(h[0]), int(m[0]), int(s[0]))
 
     return {
         'years': int(years()[0]),
