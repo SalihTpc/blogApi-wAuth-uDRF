@@ -136,7 +136,7 @@ class PostSerializer(serializers.ModelSerializer):
         return post
 
 class CategoriesSerializer(serializers.ModelSerializer):
-    post_cate = PostSerializer(many=True, read_only=True)
+    post_cate = PostSerializer(many=True, write_only=True)
     post_count = serializers.SerializerMethodField() 
     
     class Meta:
