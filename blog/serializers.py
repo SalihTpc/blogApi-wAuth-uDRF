@@ -59,11 +59,21 @@ def getDuration(then, now = now(), interval = "default"):
     }[interval]
 
 class PostViewSerializer(serializers.ModelSerializer):
+    user = serializers.PrimaryKeyRelatedField(read_only=True, required=False)
+
     class Meta:
         model = PostView
         fields = ('user', 'post')
 
+    def create(self, validated_data):
+        user = self.context['request'].user
+        if 'user' in validated_data:
+            user = validated_data['user']
+        return PostView.objects.create(user=user, **validated_data)
+
 class LikeSerializer(serializers.ModelSerializer):
+    user = serializers.PrimaryKeyRelatedField(read_only=True, required=False)
+
     class Meta:
         model = Like
         fields = ('user', 'post')
@@ -76,6 +86,7 @@ class LikeSerializer(serializers.ModelSerializer):
 
 class CommentSerializer(serializers.ModelSerializer):
     since_creation = serializers.SerializerMethodField()
+    user = serializers.PrimaryKeyRelatedField(read_only=True, required=False)
 
     class Meta:
         model = Comment
@@ -104,15 +115,16 @@ class CategorySerializer(serializers.ModelSerializer):
 
 class PostSerializer(serializers.ModelSerializer):
     since_creation = serializers.SerializerMethodField()
-    comment_post = CommentSerializer(many=True, read_only=True)
+    comment_post = CommentSerializer(many=True, read_only=True, required=False)
     comments_count = serializers.SerializerMethodField()
-    like_post = LikeSerializer(many=True, required=False)
+    like_post = LikeSerializer(many=True, read_only=True, required=False)
     likes_count = serializers.SerializerMethodField()
-    postview_post = PostViewSerializer(many=True, required=False)
+    postview_post = PostViewSerializer(many=True, read_only=True, required=False)
     postviews_count = serializers.SerializerMethodField()
     # user = serializers.HiddenField(default=serializers.CurrentUserDefault()) #buna bakılacak
-    category = CategorySerializer(many=True, required=False)
+    category = CategorySerializer(many=True, read_only=True, required=False)
     user = serializers.StringRelatedField(required=False)
+
     
 
     class Meta:
