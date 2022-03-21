@@ -34,11 +34,20 @@ def getDuration(then, now = now(), interval = "default"):
         m = minutes(h[1])
         s = seconds(m[1])
 
-        if int(y[0]) == 0 and int(d[0]) == 0:
+        if int(y[0]) < 0:
+            return 'Just Now'
+        elif int(y[0]) == 0 and int(d[0]) == 0:
             return '{} hours, {} minutes {} seconds ego'.format(int(h[0]), int(m[0]), int(s[0]))
-        if int(y[0]) == 0:
+        elif int(y[0]) == 0:
             return '{} days, {} hours, {} minutes {} seconds ego'.format(int(d[0]), int(h[0]), int(m[0]), int(s[0]))
-        return "{} years, {} days, {} hours, {} minutes {} seconds ego".format(int(y[0]), int(d[0]), int(h[0]), int(m[0]), int(s[0]))
+        else:
+            return "{} years, {} days, {} hours, {} minutes {} seconds ego".format(int(y[0]), int(d[0]), int(h[0]), int(m[0]), int(s[0]))
+
+        # if int(y[0]) == 0 and int(d[0]) == 0:
+        #     return '{} hours, {} minutes {} seconds ego'.format(int(h[0]), int(m[0]), int(s[0]))
+        # if int(y[0]) == 0:
+        #     return '{} days, {} hours, {} minutes {} seconds ego'.format(int(d[0]), int(h[0]), int(m[0]), int(s[0]))
+        # return "{} years, {} days, {} hours, {} minutes {} seconds ego".format(int(y[0]), int(d[0]), int(h[0]), int(m[0]), int(s[0]))
 
     return {
         'years': int(years()[0]),
