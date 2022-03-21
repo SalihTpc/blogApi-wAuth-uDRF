@@ -59,7 +59,7 @@ def getDuration(then, now = now(), interval = "default"):
     }[interval]
 
 class PostViewSerializer(serializers.ModelSerializer):
-    user = serializers.PrimaryKeyRelatedField(read_only=True, required=False)
+    user = serializers.StringRelatedField(read_only=True, required=False)
 
     class Meta:
         model = PostView
@@ -72,7 +72,7 @@ class PostViewSerializer(serializers.ModelSerializer):
         return PostView.objects.create(user=user, **validated_data)
 
 class LikeSerializer(serializers.ModelSerializer):
-    user = serializers.PrimaryKeyRelatedField(read_only=True, required=False)
+    user = serializers.StringRelatedField(read_only=True, required=False)
 
     class Meta:
         model = Like
@@ -86,7 +86,7 @@ class LikeSerializer(serializers.ModelSerializer):
 
 class CommentSerializer(serializers.ModelSerializer):
     since_creation = serializers.SerializerMethodField()
-    user = serializers.PrimaryKeyRelatedField(read_only=True, required=False)
+    user = serializers.StringRelatedField(read_only=True, required=False)
 
     class Meta:
         model = Comment
@@ -103,15 +103,10 @@ class CommentSerializer(serializers.ModelSerializer):
         return Comment.objects.create(user=user, **validated_data)
 
 class CategorySerializer(serializers.ModelSerializer):
-    # post_cate = PostSerializer(many=True, write_only=True)
-    # post_count = serializers.SerializerMethodField() , 'post_cate', 'post_count'
     
     class Meta:
         model = Category
         fields = ('id', 'name')
-    
-    # def get_post_count(self, obj):
-    #     return obj.post_cate.count()
 
 class PostSerializer(serializers.ModelSerializer):
     since_creation = serializers.SerializerMethodField()
@@ -124,9 +119,7 @@ class PostSerializer(serializers.ModelSerializer):
     # user = serializers.HiddenField(default=serializers.CurrentUserDefault()) #buna bakılacak
     category = CategorySerializer(many=True, read_only=True, required=False)
     user = serializers.StringRelatedField(required=False)
-
     
-
     class Meta:
         model = Post
         fields = ('id', 'category', 'user', 'title', 'body', 'image', 'since_creation', 'comment_post', 'comments_count', 'like_post', 'likes_count', 'postview_post', 'postviews_count')
