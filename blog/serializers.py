@@ -117,7 +117,7 @@ class PostSerializer(serializers.ModelSerializer):
     postview_post = PostViewSerializer(many=True, read_only=True, required=False)
     postviews_count = serializers.SerializerMethodField()
     # user = serializers.HiddenField(default=serializers.CurrentUserDefault()) #buna bakılacak
-    category = CategorySerializer(many=True, read_only=True, required=False)
+    category = CategorySerializer(many=True, required=False)
     user = serializers.StringRelatedField(required=False)
     
     class Meta:
@@ -139,12 +139,12 @@ class PostSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         user = self.context['request'].user
-        categories = validated_data.pop("category")
+        category = validated_data.pop("category")
         validated_data["user"] = user
         post = Post.objects.create(**validated_data)
-        if categories:
-            for category in categories:
-                new_cat, _ = Category.objects.get_or_create(name=category.get('name'))
+        if category:
+            for cate in category:
+                new_cat, _ = Category.objects.get_or_create(name=cate.get('name'))
                 post.category.add(new_cat.id)
         post.save()
         return post
