@@ -1,5 +1,5 @@
 from rest_framework import generics, status
-from .serializers import CategorySerializer, PostSerializer
+from .serializers import PostSerializer, CategoriesSerializer
 from .models import Category, Post
 from rest_framework.permissions import IsAdminUser, IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
@@ -8,8 +8,7 @@ from .pagination import PostPagination
 
 class CategoryView(generics.ListAPIView):
     queryset = Category.objects.all()
-    serializer_class = CategorySerializer
-    permission_classes = (IsAdminUser,)
+    serializer_class = CategoriesSerializer
 
     
 class CategoryDetailView(generics.ListAPIView):
