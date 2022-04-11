@@ -143,6 +143,7 @@ CORS_EXPOSE_HEADERS = (
     'Access-Control-Allow-Origin: *',
 )
 
+OLD_PASSWORD_FIELD_ENABLED = True
 
 REST_AUTH_SERIALIZERS = {
     "TOKEN_SERIALIZER": "users.serializers.CustomTokenSerializer",
