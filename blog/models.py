@@ -32,7 +32,7 @@ class Post(models.Model):
     updated_time = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f'{self.title}'
+        return f'{self.title} {self.user}'
 
     def save(self, *args, **kwargs):
         if self.slug is None:
