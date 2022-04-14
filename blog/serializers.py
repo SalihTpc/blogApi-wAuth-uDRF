@@ -77,7 +77,6 @@ class LikeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Like
         fields = ('user', 'post')
-        unique_together = [['user', 'post']]
 
     def create(self, validated_data):
         user = self.context['request'].user
