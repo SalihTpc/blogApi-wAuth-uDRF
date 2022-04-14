@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from django.utils.timezone import now
 from .models import Category, Like, Post, Comment, PostView
+from django.core.exceptions import ValidationError
 
 def getDuration(then, now = now(), interval = "default"):
 
@@ -65,6 +66,13 @@ class PostViewSerializer(serializers.ModelSerializer):
         model = PostView
         fields = ('user', 'post')
 
+    def validate(self, data):
+        user = self.context['request'].user
+        post = self.context['request'].data["post"]
+        if PostView.objects.filter(user=user, post=post).exists():
+            raise ValidationError("The user has already viewed this Post")
+        return data
+
     def create(self, validated_data):
         user = self.context['request'].user
         if 'user' in validated_data:
@@ -77,6 +85,13 @@ class LikeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Like
         fields = ('user', 'post')
+
+    def validate(self, data):
+        user = self.context['request'].user
+        post = self.context['request'].data["post"]
+        if Like.objects.filter(user=user, post=post).exists():
+            raise ValidationError("The user has already liked this Post")
+        return data
 
     def create(self, validated_data):
         user = self.context['request'].user
